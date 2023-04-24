@@ -1,13 +1,21 @@
 import styled from "styled-components"
+import {useNavigate} from "react-router-dom"
 
 export default function TransactionsPage() {
+  
+  const navigate = useNavigate();
+
+  function saveOperation(){
+    navigate("/home");
+  }
+
   return (
     <TransactionsContainer>
       <h1>Nova TRANSAÇÃO</h1>
       <form>
         <input placeholder="Valor" type="text"/>
         <input placeholder="Descrição" type="text" />
-        <button>Salvar TRANSAÇÃO</button>
+        <button onClick={saveOperation}>Salvar TRANSAÇÃO</button>
       </form>
     </TransactionsContainer>
   )
