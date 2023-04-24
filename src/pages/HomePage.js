@@ -14,12 +14,14 @@ export default function HomePage() {
   function newOutOperation(){
     navigate("/nova-transacao/saída");
   }
-  
+  function signOut(){
+    navigate("/");
+  }
   return (
     <HomeContainer>
       <Header>
         <h1>Olá, Fulano</h1>
-        <BiExit />
+        <BiExit onClick={signOut}/>
       </Header>
 
       <TransactionsContainer>
