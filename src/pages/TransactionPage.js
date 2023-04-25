@@ -10,7 +10,7 @@ export default function TransactionsPage() {
   const navigate = useNavigate();
   const {tipo} = useParams();
   const [form, setForm] = useState({value: "", description: ""});
-  const {token, setToken} = useContext(AuthContext);
+  const {token} = useContext(AuthContext);
   const config = {
     headers: {
       "Authorization": `Bearer ${token}`
@@ -30,7 +30,10 @@ export default function TransactionsPage() {
       console.log(res.data);
       navigate("/home");
     })
-    .catch((error) => alert(error.response.data))
+    .catch((error) => {
+      alert(error.response.data);
+      navigate("/");
+    })
   }
 
   return (

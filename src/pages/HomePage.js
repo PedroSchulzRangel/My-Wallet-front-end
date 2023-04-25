@@ -2,10 +2,34 @@ import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import {useNavigate} from "react-router-dom"
+import {useState, useEffect, useContext} from "react"
+import {AuthContext} from "../contexts/AuthContext"
+import TransactionsFunc from "../services/apiTransactions"
+import Transaction from "../components/Transaction"
 
 export default function HomePage() {
-  
-  const navigate = useNavigate();
+
+const {token} = useContext(AuthContext);
+const [transactions, setTransactions] = useState(undefined);
+const [total, setTotal] = useState(0);
+const navigate = useNavigate();
+const config = {
+  headers: {
+    "Authorization": `Bearer ${token}`
+  }
+} 
+  useEffect(() => {
+    
+    TransactionsFunc.getOperation(config)
+    .then((res) => {
+      setTransactions(res.data);
+    })
+    .catch((error) => {
+      alert(error.response.data);
+      navigate("/");})
+  }, []);
+
+  console.log(transactions);
 
   function newInOperation(){
     navigate("/nova-transacao/entrada");
@@ -20,35 +44,21 @@ export default function HomePage() {
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, Fulano</h1>
+        <h1>Olá, {transactions?.name}</h1>
         <BiExit onClick={signOut}/>
       </Header>
 
       <TransactionsContainer>
-        <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
+        {transactions?
+        transactions.list.map((t, index) => <ul><Transaction key={index} transactions ={t}/></ul>)
+        : "Não há registros de entrada ou saída"}
 
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
-        </ul>
-
+         {transactions? 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
-        </article>
+          <Value color={"positivo"}>{total}</Value>
+        </article>: ""}
       </TransactionsContainer>
-
 
       <ButtonsContainer>
         <button onClick={newInOperation}>
@@ -120,16 +130,4 @@ const Value = styled.div`
   font-size: 16px;
   text-align: right;
   color: ${(props) => (props.color === "positivo" ? "green" : "red")};
-`
-const ListItemContainer = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  color: #000000;
-  margin-right: 10px;
-  div span {
-    color: #c6c6c6;
-    margin-right: 10px;
-  }
 `
