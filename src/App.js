@@ -4,17 +4,27 @@ import HomePage from "./pages/HomePage"
 import SignInPage from "./pages/SignInPage"
 import SignUpPage from "./pages/SignUpPage"
 import TransactionsPage from "./pages/TransactionPage"
+import { useState } from "react"
+import { AuthContext } from "./contexts/AuthContext"
 
 export default function App() {
+
+  const lsToken = localStorage.getItem("token");
+  const [token, setToken] = useState(lsToken !== null ? lsToken : "");
+
+  console.log(token);
+
   return (
     <PagesContainer>
       <BrowserRouter>
+      <AuthContext.Provider value={{token, setToken}}>
         <Routes>
           <Route path="/" element={<SignInPage />} />
           <Route path="/cadastro" element={<SignUpPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/nova-transacao/:tipo" element={<TransactionsPage />} />
         </Routes>
+        </AuthContext.Provider>
       </BrowserRouter>
     </PagesContainer>
   )
