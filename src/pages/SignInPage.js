@@ -26,7 +26,7 @@ export default function SignInPage() {
       localStorage.setItem("token", res.data);
       navigate("/home");
     })
-    .catch((error) => alert(error.response.data.message))
+    .catch((error) => alert(error.response.data))
   }
   return (
     <SingInContainer>

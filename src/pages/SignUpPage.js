@@ -26,7 +26,7 @@ export default function SignUpPage() {
       console.log(res.data);
       navigate("/");
     })
-    .catch((error) => alert(error.response.data.message))
+    .catch((error) => alert(error.response.data))
   }
   return (
     <SingUpContainer>
